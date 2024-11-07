@@ -1,0 +1,48 @@
+version: "3.8"
+
+services:
+  php:
+    build:
+      context: ./docker/php
+    container_name: rate_php
+    volumes:
+      - ./app:/var/www/html
+    environment:
+      APP_ENV: dev
+      DATABASE_URL: "mysql://symfony:symfony@db:3306/rate_db"
+    networks:
+      - rate_network
+
+  db:
+    image: mariadb:latest
+    container_name: rate_db
+    environment:
+      MYSQL_ROOT_PASSWORD: root_password
+      MYSQL_DATABASE: rate_db
+      MYSQL_USER: symfony
+      MYSQL_PASSWORD: symfony
+    volumes:
+      - db_data:/var/lib/mysql
+    ports:
+      - "3456:3306"
+    networks:
+      - rate_network
+
+  nginx:
+    image: nginx:latest
+    container_name: rate_nginx
+    ports:
+      - "8080:80"
+    volumes:
+      - ./app:/var/www/html
+      - ./docker/nginx/nginx.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - php
+    networks:
+      - rate_network
+
+volumes:
+  db_data:
+
+networks:
+  rate_network:
