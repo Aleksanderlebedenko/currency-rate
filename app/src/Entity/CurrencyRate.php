@@ -8,7 +8,6 @@ use App\Enum\CurrencyEnum;
 use App\Enum\ProviderEnum;
 use App\Repository\CurrencyRateRepository;
 use DateTimeImmutable;
-use DateTimeInterface;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -27,6 +26,9 @@ class CurrencyRate
 
     #[ORM\Column(type: 'string', length: 3, enumType: CurrencyEnum::class)]
     private CurrencyEnum $currency;
+
+    #[ORM\Column(type: 'string', length: 3, enumType: CurrencyEnum::class)]
+    private CurrencyEnum $baseCurrency;
 
     #[ORM\Column(type: Types::DECIMAL, precision: 18, scale: 8)]
     private string $rate;
@@ -57,6 +59,18 @@ class CurrencyRate
         return $this;
     }
 
+    public function getBaseCurrency(): CurrencyEnum
+    {
+        return $this->baseCurrency;
+    }
+
+    public function setBaseCurrency(CurrencyEnum $baseCurrency): static
+    {
+        $this->baseCurrency = $baseCurrency;
+
+        return $this;
+    }
+
     public function getRate(): string
     {
         return $this->rate;
@@ -69,7 +83,7 @@ class CurrencyRate
         return $this;
     }
 
-    public function getDate(): DateTimeInterface
+    public function getDate(): DateTimeImmutable
     {
         return $this->date;
     }

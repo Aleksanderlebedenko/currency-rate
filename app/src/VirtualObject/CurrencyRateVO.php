@@ -5,12 +5,15 @@ declare(strict_types=1);
 namespace App\VirtualObject;
 
 use App\Enum\CurrencyEnum;
+use DateTimeImmutable;
 
-class CurrencyRateVO
+readonly class CurrencyRateVO
 {
     public function __construct(
-        CurrencyEnum $currency,
-        float $rate,
+        public CurrencyEnum $currency,
+        public CurrencyEnum $baseCurrency,
+        public DateTimeImmutable $date,
+        public string $rate,
     ) {
     }
 }
