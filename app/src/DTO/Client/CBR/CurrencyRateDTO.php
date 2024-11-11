@@ -1,6 +1,6 @@
 <?php
 
-namespace App\DTO;
+namespace App\DTO\Client\CBR;
 
 use Symfony\Component\Serializer\Annotation\SerializedName;
 

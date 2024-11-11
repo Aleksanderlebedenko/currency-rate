@@ -1,4 +1,5 @@
 parameters:
+  currency_provider: '%env(DEFAULT_CURRENCY_PROVIDER)%'
 
 services:
   Symfony\Component\Serializer\Encoder\XmlEncoder: ~
@@ -15,9 +16,9 @@ services:
   Symfony\Component\Serializer\Serializer:
     arguments:
       - [
-          '@Symfony\Component\Serializer\Normalizer\ObjectNormalizer',
-          '@Symfony\Component\Serializer\Normalizer\DateTimeNormalizer',
-          '@Symfony\Component\Serializer\Normalizer\ArrayDenormalizer',
+        '@Symfony\Component\Serializer\Normalizer\ObjectNormalizer',
+        '@Symfony\Component\Serializer\Normalizer\DateTimeNormalizer',
+        '@Symfony\Component\Serializer\Normalizer\ArrayDenormalizer',
       ]
       - [ '@Symfony\Component\Serializer\Encoder\XmlEncoder' ]
 
@@ -43,9 +44,27 @@ services:
       $url: '%env(ECB_API_URL)%'
       $serializer: '@xml_serializer'
 
+  App\CurrencyRateProvider\CurrencyProviderFactory:
+    arguments:
+      $cbrCurrencyRateProvider: '@App\CurrencyRateProvider\CBRCurrencyRateProvider'
+      $ecbCurrencyRateProvider: '@App\CurrencyRateProvider\ECBCurrencyRateProvider'
+
+  # Define the active provider as a service with conditional logic
+  App\CurrencyRateProvider\ActiveCurrencyRateProvider:
+    class: 'App\CurrencyRateProvider\CurrencyRateProviderInterface'
+    factory: [ '@App\CurrencyRateProvider\CurrencyProviderFactory', 'createProvider' ]
+    arguments:
+      - '%currency_provider%'
+    public: true
+
+    # Example service that will use the active currency provider
+  App\Service\CurrencyConversion:
+    arguments:
+      $currencyRateProvider: '@App\CurrencyRateProvider\ActiveCurrencyRateProvider'
+
   _instanceof:
-    App\CurrencyRateProvider\CurrencyRateProviderInterface:
-      tags: [ 'currency_rate_provider' ]
+    App\CurrencyRateProvider\CurrencyRatesProviderInterface:
+      tags: [ 'currency_rates_provider' ]
 
     App\Service\UpdateRates:
       calls:

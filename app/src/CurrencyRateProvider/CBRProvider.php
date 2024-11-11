@@ -2,14 +2,14 @@
 
 namespace App\CurrencyRateProvider;
 
-use App\DTO\CurrencyRatesDTO;
+use App\DTO\Client\CBR\CurrencyRatesDTO;
 use App\Enum\CurrencyEnum;
 use App\Enum\ProviderEnum;
 use App\VirtualObject\CurrencyRateVO;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
-readonly final class CBRProvider implements CurrencyRateProviderInterface
+readonly final class CBRProvider implements CurrencyRatesProviderInterface
 {
     private const CurrencyEnum BASE_CURRENCY = CurrencyEnum::RUB;
 
@@ -39,6 +39,12 @@ readonly final class CBRProvider implements CurrencyRateProviderInterface
         );
 
         $rates = [];
+        $rates[] = new CurrencyRateVO(
+            self::BASE_CURRENCY,
+            self::BASE_CURRENCY,
+            $currencyRatesDTO->getDate(),
+            '1',
+        );
         foreach ($currencyRatesDTO->getRates() as $rate) {
             $rates[] = new CurrencyRateVO(
                 CurrencyEnum::from($rate->getCharCode()),

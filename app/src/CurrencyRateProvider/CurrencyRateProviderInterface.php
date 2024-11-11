@@ -4,17 +4,14 @@ declare(strict_types=1);
 
 namespace App\CurrencyRateProvider;
 
-use App\Enum\ProviderEnum;
+use App\Enum\CurrencyEnum;
+use App\Exception\CurrencyRateNotFoundException;
 use App\VirtualObject\CurrencyRateVO;
 
 interface CurrencyRateProviderInterface
 {
-    public function getName(): ProviderEnum;
-
     /**
-     * It could be collection, for simplicity, used array of objects.
-     * @return array<int, CurrencyRateVO>
+     * @throws CurrencyRateNotFoundException
      */
-    public function getRates(): array;
-
+    public function getLatestRate(CurrencyEnum $currency): CurrencyRateVO;
 }

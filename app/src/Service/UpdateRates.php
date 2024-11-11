@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Service;
 
-use App\CurrencyRateProvider\CurrencyRateProviderInterface;
+use App\CurrencyRateProvider\CurrencyRatesProviderInterface;
 use App\Entity\CurrencyRate;
 use App\Enum\ProviderEnum;
 use App\VirtualObject\CurrencyRateVO;
@@ -18,7 +18,7 @@ final readonly class UpdateRates
     ) {
     }
 
-    #[NoReturn] public function updateRates(CurrencyRateProviderInterface ...$currencyRateProviders): void
+    #[NoReturn] public function updateRates(CurrencyRatesProviderInterface ...$currencyRateProviders): void
     {
         foreach ($currencyRateProviders as $currencyRateProvider) {
             $rates = $currencyRateProvider->getRates();

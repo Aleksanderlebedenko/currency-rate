@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace App\Repository;
 
 use App\Entity\CurrencyRate;
+use App\Enum\CurrencyEnum;
+use App\Enum\ProviderEnum;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -18,28 +20,18 @@ class CurrencyRateRepository extends ServiceEntityRepository
         parent::__construct($registry, CurrencyRate::class);
     }
 
-    //    /**
-    //     * @return CurrencyRate[] Returns an array of CurrencyRate objects
-    //     */
-    //    public function findByExampleField($value): array
-    //    {
-    //        return $this->createQueryBuilder('c')
-    //            ->andWhere('c.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->orderBy('c.id', 'ASC')
-    //            ->setMaxResults(10)
-    //            ->getQuery()
-    //            ->getResult()
-    //        ;
-    //    }
-
-    //    public function findOneBySomeField($value): ?CurrencyRate
-    //    {
-    //        return $this->createQueryBuilder('c')
-    //            ->andWhere('c.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
+    public function getLatest(
+        CurrencyEnum $from,
+        ProviderEnum $provider
+    ): ?CurrencyRate {
+        return $this->findOneBy(
+            [
+                'currency' => $from,
+                'provider' => $provider,
+            ],
+            [
+                'date' => 'DESC',
+            ]
+        );
+    }
 }

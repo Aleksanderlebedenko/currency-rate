@@ -28,4 +28,6 @@ build: ## build containers
 .PHONY: bootstrap-project
 bootstrap-project:build ## build containers and install dependencies
 	docker exec -it rate_php composer install
+	docker exec -it rate_php php bin/console doctrine:migrations:migrate --no-interaction
+	docker exec -it rate_php php bin/console update-currencies-rates
 

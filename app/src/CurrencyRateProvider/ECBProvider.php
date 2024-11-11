@@ -9,7 +9,7 @@ use App\VirtualObject\CurrencyRateVO;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
-readonly final class ECBProvider implements CurrencyRateProviderInterface
+readonly final class ECBProvider implements CurrencyRatesProviderInterface
 {
     private const CurrencyEnum BASE_CURRENCY = CurrencyEnum::EUR;
     public function __construct(
@@ -41,6 +41,12 @@ readonly final class ECBProvider implements CurrencyRateProviderInterface
         $date = $content->getDate();
 
         $rates = [];
+        $rates[] = new CurrencyRateVO(
+            self::BASE_CURRENCY,
+            self::BASE_CURRENCY,
+            $date,
+            '1',
+        );
         foreach ($content->getRates() as $rate) {
             $rates[] = new CurrencyRateVO(
                 CurrencyEnum::from($rate->getCurrency()),
