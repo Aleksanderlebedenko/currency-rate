@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\CurrencyRateProvider;
+namespace App\Provider\CurrencyRatesProvider;
 
 use App\Enum\ProviderEnum;
 use App\VirtualObject\CurrencyRateVO;

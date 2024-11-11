@@ -35,24 +35,24 @@ services:
       - '../src/Entity/'
       - '../src/Kernel.php'
 
-  App\CurrencyRateProvider\CBRProvider:
+  App\Provider\CurrencyRatesProvider\CBRProvider:
     arguments:
       $url: '%env(CBR_API_URL)%'
       $serializer: '@xml_serializer'
-  App\CurrencyRateProvider\ECBProvider:
+  App\Provider\CurrencyRatesProvider\ECBProvider:
     arguments:
       $url: '%env(ECB_API_URL)%'
       $serializer: '@xml_serializer'
 
-  App\CurrencyRateProvider\CurrencyProviderFactory:
+  App\Provider\CurrencyRateProvider\CurrencyProviderFactory:
     arguments:
-      $cbrCurrencyRateProvider: '@App\CurrencyRateProvider\CBRCurrencyRateProvider'
-      $ecbCurrencyRateProvider: '@App\CurrencyRateProvider\ECBCurrencyRateProvider'
+      $cbrCurrencyRateProvider: '@App\Provider\CurrencyRateProvider\CBRCurrencyRateProvider'
+      $ecbCurrencyRateProvider: '@App\Provider\CurrencyRateProvider\ECBCurrencyRateProvider'
 
   # Define the active provider as a service with conditional logic
-  App\CurrencyRateProvider\ActiveCurrencyRateProvider:
-    class: 'App\CurrencyRateProvider\CurrencyRateProviderInterface'
-    factory: [ '@App\CurrencyRateProvider\CurrencyProviderFactory', 'createProvider' ]
+  App\Provider\CurrencyRateProvider\ActiveCurrencyRateProvider:
+    class: 'App\Provider\CurrencyRateProvider\CurrencyRateProviderInterface'
+    factory: [ '@App\Provider\CurrencyRateProvider\CurrencyProviderFactory', 'createProvider' ]
     arguments:
       - '%currency_provider%'
     public: true
@@ -60,15 +60,15 @@ services:
     # Example service that will use the active currency provider
   App\Service\CurrencyConversion:
     arguments:
-      $currencyRateProvider: '@App\CurrencyRateProvider\ActiveCurrencyRateProvider'
+      $currencyRateProvider: '@App\Provider\CurrencyRateProvider\ActiveCurrencyRateProvider'
 
   _instanceof:
-    App\CurrencyRateProvider\CurrencyRatesProviderInterface:
+    App\Provider\CurrencyRatesProvider\CurrencyRatesProviderInterface:
       tags: [ 'currency_rates_provider' ]
 
     App\Service\UpdateRates:
       calls:
         - method: updateRates
           arguments:
-            - '@App\CurrencyRateProvider\CBRProvider'
-            - '@App\CurrencyRateProvider\ECBProvider'
+            - '@App\Provider\CurrencyRatesProvider\CBRProvider'
+            - '@App\Provider\CurrencyRatesProvider\ECBProvider'

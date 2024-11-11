@@ -1,6 +1,6 @@
 <?php
 
-namespace App\CurrencyRateProvider;
+namespace App\Provider\CurrencyRateProvider;
 
 use App\Enum\CurrencyEnum;
 use App\Enum\ProviderEnum;

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\CurrencyRateProvider;
+namespace App\Provider\CurrencyRatesProvider;
 
 use App\DTO\Client\ECB\WrapperWrapperCubeDTO;
 use App\Enum\CurrencyEnum;

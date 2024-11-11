@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Service;
 
-use App\CurrencyRateProvider\CurrencyRatesProviderInterface;
 use App\Entity\CurrencyRate;
 use App\Enum\ProviderEnum;
+use App\Provider\CurrencyRatesProvider\CurrencyRatesProviderInterface;
 use App\VirtualObject\CurrencyRateVO;
 use Doctrine\ORM\EntityManagerInterface;
 use JetBrains\PhpStorm\NoReturn;

@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Service;
 
-use App\CurrencyRateProvider\CurrencyRateProviderInterface;
 use App\Enum\CurrencyEnum;
+use App\Provider\CurrencyRateProvider\CurrencyRateProviderInterface;
 
 final readonly class CurrencyConversion
 {
